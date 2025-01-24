@@ -10,7 +10,7 @@ on:
     - QA
 
    paths:
-    - 'snowflake-scripts/etl-pipeline/etl-scripts/**' # location
+    - 'migrations/**' # location
 
  workflow_dispatch:
 
