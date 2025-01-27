@@ -76,7 +76,7 @@ jobs:
           schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE_QA.CHANGE_HISTORY --create-change-history-table
 
       - name: Run schemachange PRD
-        if: ${{ steps.extract_branch.outputs.branch == 'main' }}
+        if: ${{ steps.extract_branch.outputs.branch == 'PROD' }}
         env:
           SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
           SF_USERNAME: ${{ secrets.PRD_SF_DATA_ENGG_USERNAME }}
