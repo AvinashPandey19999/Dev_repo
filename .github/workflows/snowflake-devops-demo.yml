@@ -59,7 +59,7 @@ jobs:
           SF_ROLE: ${{ secrets.DEV_SF_ROLE }}
           SF_DATABASE: ${{ secrets.DEV_SF_DATABASE }}
           SF_WAREHOUSE: ${{ secrets.DEV_SF_WAREHOUSE }}
-          SNOWFLAKE_DATABASE_DEV: ${{ env_var.SNOWFLAKE_DATABASE_DEV }}
+          SNOWFLAKE_DATABASE_DEV: ${{ vars.SNOWFLAKE_DATABASE_DEV }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
           BRANCH_NAME_FOR_CONFIG: ${{ steps.extract_branch.outputs.branch }}
 
@@ -70,7 +70,7 @@ jobs:
           pip install schemachange==3.7.0
 
           echo "Step 2: Running schemachange"
-          schemachange --config-folder Dev_repo -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE_DEV.CHANGE_HISTORY --create-change-history-table
+          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE_DEV.CHANGE_HISTORY --create-change-history-table --vars '{"database_name":"SNOWFLAKE_DATABASE_DEV"}' --query-tag "SCHEMACHANGE"
 
       - name: Run schemachange = QA
         if: ${{ steps.extract_branch.outputs.branch == 'QA' }}
