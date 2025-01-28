@@ -58,7 +58,7 @@ jobs:
           SF_ROLE: ${{ secrets.DEV_SF_ROLE }}
           SF_DATABASE: ${{ secrets.DEV_SF_DATABASE }}
           SF_WAREHOUSE: ${{ secrets.DEV_SF_WAREHOUSE }}
-          SNOWFLAKE_DATABASE_DEV: ${{ env.SNOWFLAKE_DATABASE_DEV }}
+          SNOWFLAKE_DATABASE_DEV: ${{ var.SNOWFLAKE_DATABASE_DEV }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
           BRANCH_NAME_FOR_CONFIG: ${{ steps.extract_branch.outputs.branch }}
 
