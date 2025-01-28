@@ -7,7 +7,7 @@ on:
    branches:
     - PROD
     - DEV
-    - QA
+    - UAT
 
    paths:
     - 'migrations/**' # location
@@ -55,8 +55,8 @@ jobs:
           echo "Step 2: Running schemachange"
           schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -c $SF_DATABASE.SCHEMACHANGE_DEV.CHANGE_HISTORY --create-change-history-table --vars '{"database_name":"${{ vars.SNOWFLAKE_DATABASE_DEV }}"}' --query-tag "SCHEMACHANGE"
 
-      - name: Run schemachange = QA
-        if: ${{ steps.extract_branch.outputs.branch == 'QA' }}
+      - name: Run schemachange = UAT
+        if: ${{ steps.extract_branch.outputs.branch == 'UAT' }}
         env:
           SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
           SF_USERNAME: ${{ secrets.SF_USERNAME }}
@@ -75,9 +75,9 @@ jobs:
           pip install schemachange==3.7.0
 
           echo "Step 2: Running schemachange"
-          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE_QA.CHANGE_HISTORY --create-change-history-table --vars '{"database_name":"${{ vars.SNOWFLAKE_DATABASE_UAT }}"}' --query-tag "SCHEMACHANGE"
+          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -c $SF_DATABASE.SCHEMACHANGE_UAT.CHANGE_HISTORY --create-change-history-table --vars '{"database_name":"${{ vars.SNOWFLAKE_DATABASE_UAT }}"}' --query-tag "SCHEMACHANGE"
 
-      - name: Run schemachange PRD
+      - name: Run schemachange PROD
         if: ${{ steps.extract_branch.outputs.branch == 'PROD' }}
         env:
           SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
@@ -97,5 +97,5 @@ jobs:
           pip install schemachange==3.7.0
 
           echo "Step 2: Running schemachange"
-          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE_PRD.CHANGE_HISTORY --create-change-history-table --vars '{"database_name":"${{ vars.SNOWFLAKE_DATABASE_PROD }}"}' --query-tag "SCHEMACHANGE"
+          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -c $SF_DATABASE.SCHEMACHANGE_PRD.CHANGE_HISTORY --create-change-history-table --vars '{"database_name":"${{ vars.SNOWFLAKE_DATABASE_PROD }}"}' --query-tag "SCHEMACHANGE"
 
