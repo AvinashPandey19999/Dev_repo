@@ -80,6 +80,7 @@ jobs:
           SF_ROLE: ${{ secrets.UAT_SF_ROLE }}
           SF_WAREHOUSE: ${{ secrets.UAT_SF_WAREHOUSE }}
           SF_DATABASE: ${{ secrets.UAT_SF_DATABASE }}
+          SNOWFLAKE_DATABASE_UAT: ${{ vars.SNOWFLAKE_DATABASE_UAT }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
           BRANCH_NAME_FOR_CONFIG: ${{ steps.extract_branch.outputs.branch }} 
 
@@ -91,7 +92,7 @@ jobs:
           pip install schemachange==3.7.0
 
           echo "Step 2: Running schemachange"
-          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE_QA.CHANGE_HISTORY --create-change-history-table
+          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE_QA.CHANGE_HISTORY --create-change-history-table --vars '{"database_name":"${{ vars.SNOWFLAKE_DATABASE_UAT }}"}' --query-tag "SCHEMACHANGE"
 
       - name: Run schemachange PRD
         if: ${{ steps.extract_branch.outputs.branch == 'PROD' }}
@@ -101,6 +102,7 @@ jobs:
           SF_ROLE: ${{ secrets.PROD_SF_ROLE }}
           SF_WAREHOUSE: ${{ secrets.PROD_SF_WAREHOUSE }}
           SF_DATABASE: ${{ secrets.PROD_SF_DATABASE }}
+          SNOWFLAKE_DATABASE_PROD: ${{ vars.SNOWFLAKE_DATABASE_PROD }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }} 
           BRANCH_NAME_FOR_CONFIG: ${{ steps.extract_branch.outputs.branch }}       
           
@@ -112,5 +114,5 @@ jobs:
           pip install schemachange==3.7.0
 
           echo "Step 2: Running schemachange"
-          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE_PRD.CHANGE_HISTORY --create-change-history-table
+          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE_PRD.CHANGE_HISTORY --create-change-history-table --vars '{"database_name":"${{ vars.SNOWFLAKE_DATABASE_PROD }}"}' --query-tag "SCHEMACHANGE"
 
