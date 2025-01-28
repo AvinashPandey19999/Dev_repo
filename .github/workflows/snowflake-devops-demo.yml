@@ -28,22 +28,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Determine branch name
-        id: set-branch
-        run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            if [ -z "${{ github.event.inputs.environment }}" ]; then
-              echo "Error: 'environment' input is required for manual runs."
-              exit 1
-            fi
-            BRANCH_NAME="${{ github.event.inputs.environment }}"
-          else
-            BRANCH_NAME="${{ github.ref_name }}"
-          fi
-
-          echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
-          echo "Resolved Branch Name: $BRANCH_NAME"
-
       - name: Use Python 3.8.x
         uses: actions/setup-python@v2.2.1
 
@@ -59,7 +43,6 @@ jobs:
           SF_ROLE: ${{ secrets.DEV_SF_ROLE }}
           SF_DATABASE: ${{ secrets.DEV_SF_DATABASE }}
           SF_WAREHOUSE: ${{ secrets.DEV_SF_WAREHOUSE }}
-          SNOWFLAKE_DATABASE_DEV: ${{ vars.SNOWFLAKE_DATABASE_DEV }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
           BRANCH_NAME_FOR_CONFIG: ${{ steps.extract_branch.outputs.branch }}
 
@@ -70,7 +53,7 @@ jobs:
           pip install schemachange==3.7.0
 
           echo "Step 2: Running schemachange"
-          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE_DEV.CHANGE_HISTORY --create-change-history-table --vars '{"database_name":"${{ vars.SNOWFLAKE_DATABASE_DEV }}"}' --query-tag "SCHEMACHANGE"
+          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -c $SF_DATABASE.SCHEMACHANGE_DEV.CHANGE_HISTORY --create-change-history-table --vars '{"database_name":"${{ vars.SNOWFLAKE_DATABASE_DEV }}"}' --query-tag "SCHEMACHANGE"
 
       - name: Run schemachange = QA
         if: ${{ steps.extract_branch.outputs.branch == 'QA' }}
