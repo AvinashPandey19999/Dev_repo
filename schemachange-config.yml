@@ -1,0 +1,4 @@
+config-version: 1
+
+vars:
+  database_name: "{{env_var('SNOWFLAKE_DATABASE_DEV'), 'DEV'}}"
