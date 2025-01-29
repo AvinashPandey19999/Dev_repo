@@ -63,7 +63,6 @@ jobs:
           SF_ROLE: ${{ secrets.UAT_SF_ROLE }}
           SF_WAREHOUSE: ${{ secrets.UAT_SF_WAREHOUSE }}
           SF_DATABASE: ${{ secrets.UAT_SF_DATABASE }}
-          SNOWFLAKE_DATABASE_UAT: ${{ vars.SNOWFLAKE_DATABASE_UAT }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
           BRANCH_NAME_FOR_CONFIG: ${{ steps.extract_branch.outputs.branch }} 
 
@@ -85,7 +84,6 @@ jobs:
           SF_ROLE: ${{ secrets.PROD_SF_ROLE }}
           SF_WAREHOUSE: ${{ secrets.PROD_SF_WAREHOUSE }}
           SF_DATABASE: ${{ secrets.PROD_SF_DATABASE }}
-          SNOWFLAKE_DATABASE_PROD: ${{ vars.SNOWFLAKE_DATABASE_PROD }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }} 
           BRANCH_NAME_FOR_CONFIG: ${{ steps.extract_branch.outputs.branch }}       
           
