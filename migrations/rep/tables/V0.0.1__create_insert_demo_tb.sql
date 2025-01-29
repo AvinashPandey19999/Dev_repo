@@ -10,4 +10,5 @@ CREATE TABLE IF NOT EXISTS {{database_name}}_REP.SF.SAMPLE_TABLE (
 INSERT INTO {{database_name}}_REP.SF.SAMPLE_TABLE (ID, NAME)
 VALUES (1, 'Alice'),
        (2, 'Bob'),
-       (3, 'Charlie');
+       (3, 'Charlie')
+;
