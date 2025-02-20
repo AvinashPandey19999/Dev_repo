@@ -1,5 +1,6 @@
 
-CREATE TABLE IF NOT EXISTS {{database_name}}_REP.SF.demo_table2 (
+CREATE OR REPLACE TABLE {{database_name}}_REP.SF.demo_table2 (
     ID INT,
-    NAME STRING
+    NAME STRING,
+    COMMENT STRING
 );
