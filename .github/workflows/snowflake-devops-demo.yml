@@ -49,7 +49,7 @@ jobs:
           SF_ROLE: ${{ secrets.DEV_SF_ROLE }}
           SF_DATABASE: ${{ secrets.DEV_SF_DATABASE }}
           SF_WAREHOUSE: ${{ secrets.DEV_SF_WAREHOUSE }}
-          SNOWFLAKE_PRIVATE_KEY_PATH: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PATH }}
+          SNOWFLAKE_PRIVATE_KEY_PATH: "./config/rsa_key.p8"
           SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}
           BRANCH_NAME_FOR_CONFIG: ${{ steps.extract_branch.outputs.branch }}
 
