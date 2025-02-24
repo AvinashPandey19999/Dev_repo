@@ -4,3 +4,4 @@ CREATE OR REPLACE TABLE {{database_name}}_REP.SF.demo_table2 (
     NAME STRING,
     COMMENT STRING
 );
+
