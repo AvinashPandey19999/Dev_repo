@@ -2,7 +2,7 @@ name: sf-devops-script-deployment
 
 # Controls when the action will run.
 on:
- # Triggers the workflow on push or pull request events
+ # Triggers the workflow on push or pull request events but only for the "main" branch
  push:
    branches:
     - PROD
@@ -33,11 +33,6 @@ jobs:
 
         with:
           python-version: 3.8.x
-      
-      - name: Decrypt RSA key
-        run: |
-          echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}"  > /tmp/key
-          chmod 600 /tmp/key
 
       - name: Run schemachange for DEV
         if: ${{ steps.extract_branch.outputs.branch == 'DEV' }}
@@ -48,8 +43,7 @@ jobs:
           SF_ROLE: ${{ secrets.DEV_SF_ROLE }}
           SF_DATABASE: ${{ secrets.DEV_SF_DATABASE }}
           SF_WAREHOUSE: ${{ secrets.DEV_SF_WAREHOUSE }}
-          SNOWFLAKE_PRIVATE_KEY_PATH: /tmp/key
-          SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
           BRANCH_NAME_FOR_CONFIG: ${{ steps.extract_branch.outputs.branch }}
 
         run: |
@@ -69,8 +63,7 @@ jobs:
           SF_ROLE: ${{ secrets.UAT_SF_ROLE }}
           SF_WAREHOUSE: ${{ secrets.UAT_SF_WAREHOUSE }}
           SF_DATABASE: ${{ secrets.UAT_SF_DATABASE }}
-          SNOWFLAKE_PRIVATE_KEY_PATH: /tmp/key
-          SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
           BRANCH_NAME_FOR_CONFIG: ${{ steps.extract_branch.outputs.branch }} 
 
         run: |
@@ -91,8 +84,7 @@ jobs:
           SF_ROLE: ${{ secrets.PROD_SF_ROLE }}
           SF_WAREHOUSE: ${{ secrets.PROD_SF_WAREHOUSE }}
           SF_DATABASE: ${{ secrets.PROD_SF_DATABASE }}
-          SNOWFLAKE_PRIVATE_KEY_PATH: /tmp/key
-          SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }} 
           BRANCH_NAME_FOR_CONFIG: ${{ steps.extract_branch.outputs.branch }}       
           
         run: |
@@ -104,4 +96,3 @@ jobs:
 
           echo "Step 2: Running schemachange"
           schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE_PRD.CHANGE_HISTORY --create-change-history-table --vars '{"database_name":"${{ vars.SNOWFLAKE_DATABASE_PROD }}"}' --query-tag "SCHEMACHANGE"
-
